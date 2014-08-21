@@ -11,6 +11,8 @@ import com.google.common.net.HostAndPort;
 import io.dropwizard.logging.AbstractAppenderFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * An {@link io.dropwizard.logging.AppenderFactory} implementation which provides an appender that writes events to Loggly.
  * <p/>
@@ -59,7 +61,7 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory {
 
     private static final String ENDPOINT_URL_TEMPLATE = "https://%s/inputs/%s/tag/%s";
 
-    @NotEmpty
+    @NotNull
     private HostAndPort server = HostAndPort.fromString("logs-01.loggly.com");
 
     @NotEmpty
