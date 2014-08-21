@@ -6,5 +6,10 @@ branches:
   only:
     - master
 
+env:
+  global:
+    - secure: "XTN4kK4TfjmneylgvMAU6QYTfTIZmlgpRxIl0Me3MHaZ1qB5Sv+YECkFgbj7dPzQ1YeSVWgCpTXF1cLgiGjps0iTVBFAjNP36P5UHrQFqt4fxARAJvodShYuRfoq4KirymP9uGLA/VOAKpv6ybZZK1a412Y1Ll84mQR6s0MRnso="
+    - secure: "pIvnaTeINA/KKRLi4kvFYxTzKQPaNnEU3Js57tp8RIrVKag/et4Y3c/CPAemGgRghdkTip8qz+OLucyLUW3f09H5sMFwpyx5NOOj/3T1VI2Qlu5mw3I1vfpCRdQvUp7qTb+L/VT4LBtwvoj48d09ODvWhoqJNn6H0pVzNLTCcv8="
+
 after_success:
   - mvn clean deploy --settings settings.xml
