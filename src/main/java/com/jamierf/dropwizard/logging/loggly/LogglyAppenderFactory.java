@@ -14,10 +14,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * An {@link io.dropwizard.logging.AppenderFactory} implementation which provides an appender that writes events to Loggly.
- * <p/>
+ * <p>An {@link io.dropwizard.logging.AppenderFactory} implementation which provides an appender that writes events to Loggly.</p>
  * <b>Configuration Parameters:</b>
- * <table>
+ * <table summary="Configuration">
  *     <tr>
  *         <td>Name</td>
  *         <td>Default</td>
