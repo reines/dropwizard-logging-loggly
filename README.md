@@ -10,15 +10,19 @@ dropwizard-logging-loggly can be found in maven central.
 
 ## Installation
 
-    <dependency>
-        <groupId>com.jamierf.dropwizard</groupId>
-        <artifactId>dropwizard-logging-loggly</artifactId>
-        <version>...</version>
-    </dependency>
+```xml
+<dependency>
+    <groupId>com.jamierf.dropwizard</groupId>
+    <artifactId>dropwizard-logging-loggly</artifactId>
+    <version>...</version>
+</dependency>
+```
 
 ## Configuration
 
-    logging:
-      appenders:
-        - type: loggly
-          token: "..."
+```yaml
+logging:
+  appenders:
+    - type: loggly
+      token: "..."
+```
