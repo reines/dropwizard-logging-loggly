@@ -26,3 +26,7 @@ logging:
     - type: loggly
       token: "..."
 ```
+
+## License
+
+Released under the [Apache 2.0 License](LICENSE).
