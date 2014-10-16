@@ -43,6 +43,11 @@ import javax.validation.constraints.NotNull;
  *         <td>Your Loggly customer token.</td>
  *     </tr>
  *     <tr>
+ *         <td>{@code tag}</td>
+ *         <td>{@code application name}</td>
+ *         <td>The Loggly tag.</td>
+ *     </tr>
+ *     <tr>
  *         <td>{@code logFormat}</td>
  *         <td>the default format</td>
  *         <td>
@@ -66,6 +71,8 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory {
     @NotEmpty
     private String token;
 
+    private String tag;
+
     @JsonProperty
     public HostAndPort getServer() {
         return server;
@@ -86,13 +93,25 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory {
         this.token = token;
     }
 
+    @JsonProperty
+    public String getTag() {
+        return tag;
+    }
+
+    @JsonProperty
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     @Override
     public Appender<ILoggingEvent> build(LoggerContext context, String applicationName, Layout<ILoggingEvent> layout) {
         final LogglyAppender<ILoggingEvent> appender = new LogglyAppender<>();
 
+        final String tagName = tag != null ? tag : applicationName;
+
         appender.setName("loggly-appender");
         appender.setContext(context);
-        appender.setEndpointUrl(String.format(ENDPOINT_URL_TEMPLATE, server, token, applicationName));
+        appender.setEndpointUrl(String.format(ENDPOINT_URL_TEMPLATE, server, token, tagName));
 
         addThresholdFilter(appender, threshold);
         appender.start();
