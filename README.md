@@ -25,6 +25,7 @@ logging:
   appenders:
     - type: loggly
       token: "..."
+      tag: "example-prod"
 ```
 
 ## License
