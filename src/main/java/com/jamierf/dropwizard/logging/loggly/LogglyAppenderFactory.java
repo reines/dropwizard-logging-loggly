@@ -7,6 +7,7 @@ import ch.qos.logback.core.Layout;
 import ch.qos.logback.ext.loggly.LogglyAppender;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.common.base.Optional;
 import com.google.common.net.HostAndPort;
 import io.dropwizard.logging.AbstractAppenderFactory;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -44,7 +45,7 @@ import javax.validation.constraints.NotNull;
  *     </tr>
  *     <tr>
  *         <td>{@code tag}</td>
- *         <td>{@code application name}</td>
+ *         <td>the application name</td>
  *         <td>The Loggly tag.</td>
  *     </tr>
  *     <tr>
@@ -71,7 +72,8 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory {
     @NotEmpty
     private String token;
 
-    private String tag;
+    @NotNull
+    private Optional<String> tag = Optional.absent();
 
     @JsonProperty
     public HostAndPort getServer() {
@@ -94,12 +96,12 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory {
     }
 
     @JsonProperty
-    public String getTag() {
+    public Optional<String> getTag() {
         return tag;
     }
 
     @JsonProperty
-    public void setTag(String tag) {
+    public void setTag(final Optional<String> tag) {
         this.tag = tag;
     }
 
@@ -107,7 +109,7 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory {
     public Appender<ILoggingEvent> build(LoggerContext context, String applicationName, Layout<ILoggingEvent> layout) {
         final LogglyAppender<ILoggingEvent> appender = new LogglyAppender<>();
 
-        final String tagName = tag != null ? tag : applicationName;
+        final String tagName = tag.or(applicationName);
 
         appender.setName("loggly-appender");
         appender.setContext(context);
