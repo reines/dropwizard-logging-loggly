@@ -25,8 +25,18 @@ logging:
   appenders:
     - type: loggly
       token: "..."
-      tag: "example-prod"
+      tag: "example-prod" # optional
 ```
+
+## Change Log
+
+#### 0.5 - 18 October 2014
+
+* Added (optional) `tag` configuration parameter.
+
+#### 0.4 - 28 September 2014
+
+* Initial release.
 
 ## License
 
