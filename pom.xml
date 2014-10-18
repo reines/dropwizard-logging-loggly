@@ -10,7 +10,7 @@
 
     <groupId>com.jamierf.dropwizard</groupId>
     <artifactId>dropwizard-logging-loggly</artifactId>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.5</version>
 
     <properties>
         <jdk.version>1.7</jdk.version>
