@@ -30,6 +30,10 @@ logging:
 
 ## Change Log
 
+#### 0.6 - _Coming soon_
+
+* Send logs in Json format rather than plain.
+
 #### 0.5 - 18 October 2014
 
 * Added (optional) `tag` configuration parameter.

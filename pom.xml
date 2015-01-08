@@ -16,7 +16,7 @@
         <jdk.version>1.7</jdk.version>
 
         <dropwizard.version>0.7.0</dropwizard.version>
-        <logback-ext-loggly.version>0.1.2</logback-ext-loggly.version>
+        <logback-extras.version>0.1.2</logback-extras.version>
     </properties>
 
     <licenses>
@@ -54,9 +54,29 @@
             <version>${dropwizard.version}</version>
         </dependency>
         <dependency>
+            <groupId>ch.qos.logback.contrib</groupId>
+            <artifactId>logback-json-classic</artifactId>
+            <version>${logback-extras.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback.contrib</groupId>
+            <artifactId>logback-jackson</artifactId>
+            <version>${logback-extras.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.logback-extensions</groupId>
             <artifactId>logback-ext-loggly</artifactId>
-            <version>${logback-ext-loggly.version}</version>
+            <version>${logback-extras.version}</version>
         </dependency>
     </dependencies>
 

@@ -2,6 +2,8 @@ package com.jamierf.dropwizard.logging.loggly;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.contrib.jackson.JacksonJsonFormatter;
+import ch.qos.logback.contrib.json.classic.JsonLayout;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.Layout;
 import ch.qos.logback.ext.loggly.LogglyAppender;
@@ -114,10 +116,20 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory {
         appender.setName("loggly-appender");
         appender.setContext(context);
         appender.setEndpointUrl(String.format(ENDPOINT_URL_TEMPLATE, server, token, tagName));
+        appender.setLayout(layout == null ? buildLayout(context) : layout);
 
         addThresholdFilter(appender, threshold);
         appender.start();
 
         return wrapAsync(appender);
+    }
+
+    protected Layout<ILoggingEvent> buildLayout(LoggerContext context) {
+        JsonLayout formatter = new JsonLayout();
+        formatter.setJsonFormatter(new JacksonJsonFormatter());
+        formatter.setAppendLineSeparator(true);
+        formatter.setContext(context);
+        formatter.start();
+        return formatter;
     }
 }
