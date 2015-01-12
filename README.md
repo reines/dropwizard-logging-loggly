@@ -30,7 +30,7 @@ logging:
 
 ## Change Log
 
-#### 0.6 - _Coming soon_
+#### 0.6 - 12 January 2015
 
 * Send logs in Json format rather than plain.
 
