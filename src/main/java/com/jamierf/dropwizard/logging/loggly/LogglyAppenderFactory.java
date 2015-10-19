@@ -66,6 +66,8 @@ import javax.validation.constraints.NotNull;
 @JsonTypeName("loggly")
 public class LogglyAppenderFactory extends AbstractAppenderFactory {
 
+    private static final String ISO_8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
     private static final String ENDPOINT_URL_TEMPLATE = "https://%s/inputs/%s/tag/%s";
 
     @NotNull
@@ -129,6 +131,8 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory {
         formatter.setJsonFormatter(new JacksonJsonFormatter());
         formatter.setAppendLineSeparator(true);
         formatter.setContext(context);
+        formatter.setTimestampFormat(ISO_8601_FORMAT);  //as per https://www.loggly.com/docs/automated-parsing/#json
+        formatter.setTimestampFormatTimezoneId("UTC");
         formatter.start();
         return formatter;
     }
