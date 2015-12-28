@@ -107,7 +107,7 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory {
     }
 
     @JsonProperty
-    public void setTag(Optional<String> tag) {
+    public void setTag(final Optional<String> tag) {
         this.tag = tag;
     }
 
