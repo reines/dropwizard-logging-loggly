@@ -13,6 +13,7 @@ import com.google.common.base.Optional;
 import com.google.common.net.HostAndPort;
 import io.dropwizard.logging.AbstractAppenderFactory;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.valuehandling.UnwrapValidatedValue;
 
 import javax.validation.constraints.NotNull;
 
@@ -77,6 +78,7 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory {
     private String token;
 
     @NotNull
+    @UnwrapValidatedValue(false)
     private Optional<String> tag = Optional.absent();
 
     @JsonProperty
