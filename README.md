@@ -30,6 +30,11 @@ logging:
 
 ## Change Log
 
+#### 0.7 - 19 January 2016
+
+* Support for Dropwizard 0.9.x.
+* Use ISO 8601 format for timestamps.
+
 #### 0.6 - 12 January 2015
 
 * Send logs in Json format rather than plain.
