@@ -5,7 +5,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.contrib.jackson.JacksonJsonFormatter;
 import ch.qos.logback.contrib.json.classic.JsonLayout;
 import ch.qos.logback.core.Appender;
-import ch.qos.logback.ext.loggly.LogglyAppender;
+import ch.qos.logback.ext.loggly.LogglyBatchAppender;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.base.Optional;
@@ -70,8 +70,7 @@ import javax.validation.constraints.NotNull;
 public class LogglyAppenderFactory extends AbstractAppenderFactory<ILoggingEvent> {
 
     private static final String ISO_8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-
-    private static final String ENDPOINT_URL_TEMPLATE = "https://%s/inputs/%s/tag/%s";
+    private static final String ENDPOINT_URL_TEMPLATE = "https://%s/bulk/%s/tag/%s";
 
     @NotNull
     private HostAndPort server = HostAndPort.fromString("logs-01.loggly.com");
@@ -127,7 +126,7 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory<ILoggingEvent
     @Override
     public Appender<ILoggingEvent> build(LoggerContext context, String applicationName, LayoutFactory<ILoggingEvent> layoutFactory,
                           LevelFilterFactory<ILoggingEvent> levelFilterFactory, AsyncAppenderFactory<ILoggingEvent> asyncAppenderFactory) {
-        final LogglyAppender<ILoggingEvent> appender = new LogglyAppender<>();
+        final LogglyBatchAppender<ILoggingEvent> appender = new LogglyBatchAppender<>();
 
         final String tagName = tag.or(applicationName);
 

@@ -4,7 +4,7 @@ import ch.qos.logback.access.spi.IAccessEvent;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.Layout;
-import ch.qos.logback.ext.loggly.LogglyAppender;
+import ch.qos.logback.ext.loggly.LogglyBatchAppender;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.base.Optional;
@@ -83,7 +83,7 @@ import javax.validation.constraints.NotNull;
 @JsonTypeName("loggly-request")
 public class LogglyRequestAppenderFactory extends AbstractAppenderFactory<IAccessEvent> {
 
-    private static final String ENDPOINT_URL_TEMPLATE = "https://%s/inputs/%s/tag/%s";
+    private static final String ENDPOINT_URL_TEMPLATE = "https://%s/bulk/%s/tag/%s";
 
     @NotNull
     private HostAndPort server = HostAndPort.fromString("logs-01.loggly.com");
@@ -198,7 +198,7 @@ public class LogglyRequestAppenderFactory extends AbstractAppenderFactory<IAcces
     @Override
     public Appender<IAccessEvent> build(LoggerContext context, String applicationName, LayoutFactory<IAccessEvent> layoutFactory,
                           LevelFilterFactory<IAccessEvent> levelFilterFactory, AsyncAppenderFactory<IAccessEvent> asyncAppenderFactory) {
-        final LogglyAppender<IAccessEvent> appender = new LogglyAppender<>();
+        final LogglyBatchAppender<IAccessEvent> appender = new LogglyBatchAppender<>();
 
         final String tagName = tag.or(applicationName);
 
