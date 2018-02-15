@@ -5,13 +5,15 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.contrib.jackson.JacksonJsonFormatter;
 import ch.qos.logback.contrib.json.classic.JsonLayout;
 import ch.qos.logback.core.Appender;
-import ch.qos.logback.core.Layout;
-import ch.qos.logback.ext.loggly.LogglyAppender;
+import ch.qos.logback.ext.loggly.LogglyBatchAppender;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.base.Optional;
 import com.google.common.net.HostAndPort;
 import io.dropwizard.logging.AbstractAppenderFactory;
+import io.dropwizard.logging.async.AsyncAppenderFactory;
+import io.dropwizard.logging.filter.LevelFilterFactory;
+import io.dropwizard.logging.layout.LayoutFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.valuehandling.UnwrapValidatedValue;
 
@@ -65,11 +67,10 @@ import javax.validation.constraints.NotNull;
  * @see io.dropwizard.logging.AbstractAppenderFactory
  */
 @JsonTypeName("loggly")
-public class LogglyAppenderFactory extends AbstractAppenderFactory {
+public class LogglyAppenderFactory extends AbstractAppenderFactory<ILoggingEvent> {
 
     private static final String ISO_8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-
-    private static final String ENDPOINT_URL_TEMPLATE = "https://%s/inputs/%s/tag/%s";
+    private static final String ENDPOINT_URL_TEMPLATE = "https://%s/bulk/%s/tag/%s";
 
     @NotNull
     private HostAndPort server = HostAndPort.fromString("logs-01.loggly.com");
@@ -111,24 +112,7 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory {
         this.tag = tag;
     }
 
-    @Override
-    public Appender<ILoggingEvent> build(LoggerContext context, String applicationName, Layout<ILoggingEvent> layout) {
-        final LogglyAppender<ILoggingEvent> appender = new LogglyAppender<>();
-
-        final String tagName = tag.or(applicationName);
-
-        appender.setName("loggly-appender");
-        appender.setContext(context);
-        appender.setEndpointUrl(String.format(ENDPOINT_URL_TEMPLATE, server, token, tagName));
-        appender.setLayout(layout == null ? buildLayout(context) : layout);
-
-        addThresholdFilter(appender, threshold);
-        appender.start();
-
-        return wrapAsync(appender);
-    }
-
-    protected Layout<ILoggingEvent> buildLayout(LoggerContext context) {
+    protected JsonLayout buildJsonLayout(LoggerContext context, LayoutFactory<ILoggingEvent> layoutFactory) {
         JsonLayout formatter = new JsonLayout();
         formatter.setJsonFormatter(new JacksonJsonFormatter());
         formatter.setAppendLineSeparator(true);
@@ -137,5 +121,22 @@ public class LogglyAppenderFactory extends AbstractAppenderFactory {
         formatter.setTimestampFormatTimezoneId("UTC");
         formatter.start();
         return formatter;
+    }
+
+    @Override
+    public Appender<ILoggingEvent> build(LoggerContext context, String applicationName, LayoutFactory<ILoggingEvent> layoutFactory,
+                          LevelFilterFactory<ILoggingEvent> levelFilterFactory, AsyncAppenderFactory<ILoggingEvent> asyncAppenderFactory) {
+        final LogglyBatchAppender<ILoggingEvent> appender = new LogglyBatchAppender<>();
+
+        final String tagName = tag.or(applicationName);
+
+        appender.setName("loggly-appender");
+        appender.setContext(context);
+        appender.setEndpointUrl(String.format(ENDPOINT_URL_TEMPLATE, server, token, tagName));
+        appender.setLayout(buildJsonLayout(context, layoutFactory));
+        appender.addFilter(levelFilterFactory.build(threshold));
+        appender.start();
+
+        return wrapAsync(appender, asyncAppenderFactory);
     }
 }

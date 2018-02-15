@@ -1,1 +1,2 @@
+com.jamierf.dropwizard.logging.loggly.LogglyRequestAppenderFactory
 com.jamierf.dropwizard.logging.loggly.LogglyAppenderFactory
